@@ -1,0 +1,2 @@
+# Project Thoughts
+1. 

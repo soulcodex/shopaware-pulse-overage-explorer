@@ -1,0 +1,39 @@
+{
+  "eu_001": [
+    {
+      "id": "note_1",
+      "author": { "id": "user_1", "name": "Alex Chen" },
+      "content": "Customer asked about volume discount for next quarter. Follow up next week."
+    },
+    {
+      "id": "note_2",
+      "author": { "id": "user_2", "name": "Sam Rivera" },
+      "content": "Confirmed order limit increase processed. No overage this cycle."
+    }
+  ],
+  "eu_002": [
+    {
+      "id": "note_3",
+      "author": { "id": "user_1", "name": "Alex Chen" },
+      "content": "Overage discussion scheduled for Friday. Sent pricing sheet."
+    }
+  ],
+  "eu_003": [],
+  "eu_004": [
+    {
+      "id": "note_4",
+      "author": { "id": "user_2", "name": "Sam Rivera" },
+      "content": "Scale plan at capacity this month. Consider upgrade path."
+    }
+  ],
+  "us_001": [
+    {
+      "id": "note_5",
+      "author": { "id": "user_1", "name": "Alex Chen" },
+      "content": "Support ticket #4421 resolved. Customer satisfied."
+    }
+  ],
+  "us_002": [],
+  "us_003": [],
+  "us_004": []
+}

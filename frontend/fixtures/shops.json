@@ -1,46 +1,90 @@
 [
   {
-    "id": "shop_1",
-    "name": "Acme Apparel",
+    "id": "eu_001",
+    "name": "Blue Bicycle",
     "plan": "starter",
     "status": "active",
-    "usage": 8500,
-    "included_usage": 10000,
-    "overage_charges": 0,
-    "created_at": "2025-12-01T10:00:00Z",
-    "updated_at": "2026-03-01T09:30:00Z"
+    "usage": 250,
+    "included_usage": 200,
+    "overage_charges": 2.5,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
   },
   {
-    "id": "shop_2",
-    "name": "Glow Cosmetics",
+    "id": "eu_002",
+    "name": "KaffeeKult",
     "plan": "grow",
     "status": "active",
-    "usage": 13500,
-    "included_usage": 12000,
-    "overage_charges": 75.5,
-    "created_at": "2025-11-15T08:15:00Z",
-    "updated_at": "2026-03-02T13:45:00Z"
+    "usage": 1150,
+    "included_usage": 1000,
+    "overage_charges": 4.5,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
   },
   {
-    "id": "shop_3",
-    "name": "Urban Gadgets",
-    "plan": "scale",
+    "id": "eu_003",
+    "name": "Nordic Gear",
+    "plan": "starter",
     "status": "past_due",
-    "usage": 42000,
-    "included_usage": 30000,
-    "overage_charges": 380.0,
-    "created_at": "2025-10-05T14:20:00Z",
-    "updated_at": "2026-03-03T16:10:00Z"
+    "usage": 210,
+    "included_usage": 200,
+    "overage_charges": 0.5,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
   },
   {
-    "id": "shop_4",
-    "name": "Home & Hearth",
-    "plan": "grow",
-    "status": "cancelled",
-    "usage": 6000,
-    "included_usage": 8000,
+    "id": "eu_004",
+    "name": "Pet Paradise",
+    "plan": "scale",
+    "status": "active",
+    "usage": 5000,
+    "included_usage": 5000,
     "overage_charges": 0,
-    "created_at": "2025-09-10T12:00:00Z",
-    "updated_at": "2026-02-20T11:00:00Z"
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "us_001",
+    "name": "Sunrise Electronics",
+    "plan": "grow",
+    "status": "active",
+    "usage": 1100,
+    "included_usage": 1000,
+    "overage_charges": 3,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "us_002",
+    "name": "Trail Outfitters",
+    "plan": "starter",
+    "status": "active",
+    "usage": 160,
+    "included_usage": 200,
+    "overage_charges": 0,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "us_003",
+    "name": "Book Bazaar",
+    "plan": "starter",
+    "status": "cancelled",
+    "usage": 45,
+    "included_usage": 200,
+    "overage_charges": 0,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "us_004",
+    "name": "Sneaker Hub",
+    "plan": "scale",
+    "status": "active",
+    "usage": 5200,
+    "included_usage": 5000,
+    "overage_charges": 2,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
   }
 ]
