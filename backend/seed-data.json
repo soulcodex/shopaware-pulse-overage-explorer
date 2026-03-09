@@ -1,0 +1,220 @@
+{
+  "plans": [
+    { "id": "starter", "name": "Starter", "includedOrders": 200, "overagePerOrderEur": 0.05 },
+    { "id": "grow", "name": "Grow", "includedOrders": 1000, "overagePerOrderEur": 0.03 },
+    { "id": "scale", "name": "Scale", "includedOrders": 5000, "overagePerOrderEur": 0.01 }
+  ],
+  "shops": [
+    {
+      "id": "eu_001",
+      "tenantId": "tnt_eu_01",
+      "name": "Blue Bicycle",
+      "status": "active",
+      "planId": "starter",
+      "billingCycleStart": "2026-03-01",
+      "billingCycleEnd": "2026-03-31"
+    },
+    {
+      "id": "eu_002",
+      "tenantId": "tnt_eu_01",
+      "name": "KaffeeKult",
+      "status": "active",
+      "planId": "grow",
+      "billingCycleStart": "2026-03-01",
+      "billingCycleEnd": "2026-03-31"
+    },
+    {
+      "id": "eu_003",
+      "tenantId": "tnt_eu_01",
+      "name": "Nordic Gear",
+      "status": "past_due",
+      "planId": "starter",
+      "billingCycleStart": "2026-03-01",
+      "billingCycleEnd": "2026-03-31"
+    },
+    {
+      "id": "eu_004",
+      "tenantId": "tnt_eu_01",
+      "name": "Pet Paradise",
+      "status": "active",
+      "planId": "scale",
+      "billingCycleStart": "2026-03-01",
+      "billingCycleEnd": "2026-03-31"
+    },
+    {
+      "id": "us_001",
+      "tenantId": "tnt_us_01",
+      "name": "Sunrise Electronics",
+      "status": "active",
+      "planId": "grow",
+      "billingCycleStart": "2026-03-01",
+      "billingCycleEnd": "2026-03-31"
+    },
+    {
+      "id": "us_002",
+      "tenantId": "tnt_us_01",
+      "name": "Trail Outfitters",
+      "status": "active",
+      "planId": "starter",
+      "billingCycleStart": "2026-03-01",
+      "billingCycleEnd": "2026-03-31"
+    },
+    {
+      "id": "us_003",
+      "tenantId": "tnt_us_01",
+      "name": "Book Bazaar",
+      "status": "cancelled",
+      "planId": "starter",
+      "billingCycleStart": "2026-03-01",
+      "billingCycleEnd": "2026-03-31"
+    },
+    {
+      "id": "us_004",
+      "tenantId": "tnt_us_01",
+      "name": "Sneaker Hub",
+      "status": "active",
+      "planId": "scale",
+      "billingCycleStart": "2026-03-01",
+      "billingCycleEnd": "2026-03-31"
+    }
+  ],
+  "usageEvents": [
+    {
+      "id": "evt_0001",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_001",
+      "timestamp": "2026-03-02T10:15:00Z",
+      "orders": 50,
+      "gmvEur": 6000
+    },
+    {
+      "id": "evt_0002",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_001",
+      "timestamp": "2026-03-10T09:45:00Z",
+      "orders": 120,
+      "gmvEur": 18000
+    },
+    {
+      "id": "evt_0003",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_001",
+      "timestamp": "2026-03-18T14:30:00Z",
+      "orders": 80,
+      "gmvEur": 12000
+    },
+    {
+      "id": "evt_0004",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_002",
+      "timestamp": "2026-03-03T11:00:00Z",
+      "orders": 300,
+      "gmvEur": 18000
+    },
+    {
+      "id": "evt_0005",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_002",
+      "timestamp": "2026-03-12T11:00:00Z",
+      "orders": 450,
+      "gmvEur": 27000
+    },
+    {
+      "id": "evt_0006",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_002",
+      "timestamp": "2026-03-22T11:00:00Z",
+      "orders": 400,
+      "gmvEur": 24000
+    },
+    {
+      "id": "evt_0007",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_003",
+      "timestamp": "2026-03-01T08:00:00Z",
+      "orders": 90,
+      "gmvEur": 9000
+    },
+    {
+      "id": "evt_0008",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_003",
+      "timestamp": "2026-03-15T08:00:00Z",
+      "orders": 120,
+      "gmvEur": 13000
+    },
+    {
+      "id": "evt_0009",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_004",
+      "timestamp": "2026-03-09T16:00:00Z",
+      "orders": 2400,
+      "gmvEur": 145000
+    },
+    {
+      "id": "evt_0010",
+      "tenantId": "tnt_eu_01",
+      "shopId": "eu_004",
+      "timestamp": "2026-03-25T16:00:00Z",
+      "orders": 2600,
+      "gmvEur": 150000
+    },
+    {
+      "id": "evt_0011",
+      "tenantId": "tnt_us_01",
+      "shopId": "us_001",
+      "timestamp": "2026-03-02T10:00:00Z",
+      "orders": 500,
+      "gmvEur": 50000
+    },
+    {
+      "id": "evt_0012",
+      "tenantId": "tnt_us_01",
+      "shopId": "us_001",
+      "timestamp": "2026-03-21T10:00:00Z",
+      "orders": 600,
+      "gmvEur": 62000
+    },
+    {
+      "id": "evt_0013",
+      "tenantId": "tnt_us_01",
+      "shopId": "us_002",
+      "timestamp": "2026-03-09T09:00:00Z",
+      "orders": 70,
+      "gmvEur": 7000
+    },
+    {
+      "id": "evt_0014",
+      "tenantId": "tnt_us_01",
+      "shopId": "us_002",
+      "timestamp": "2026-03-17T09:00:00Z",
+      "orders": 90,
+      "gmvEur": 9000
+    },
+    {
+      "id": "evt_0015",
+      "tenantId": "tnt_us_01",
+      "shopId": "us_003",
+      "timestamp": "2026-03-18T13:00:00Z",
+      "orders": 45,
+      "gmvEur": 3500
+    },
+    {
+      "id": "evt_0016",
+      "tenantId": "tnt_us_01",
+      "shopId": "us_004",
+      "timestamp": "2026-03-11T17:00:00Z",
+      "orders": 2400,
+      "gmvEur": 180000
+    },
+    {
+      "id": "evt_0017",
+      "tenantId": "tnt_us_01",
+      "shopId": "us_004",
+      "timestamp": "2026-03-27T17:00:00Z",
+      "orders": 2800,
+      "gmvEur": 210000
+    }
+  ],
+  "notes": []
+}
