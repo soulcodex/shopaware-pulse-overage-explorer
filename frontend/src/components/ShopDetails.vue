@@ -24,6 +24,9 @@
           </span>
         </dd>
 
+        <dt class="shop-details__term">Billing cycle</dt>
+        <dd class="shop-details__value">{{ billingCycleLabel }}</dd>
+
         <dt class="shop-details__term">Usage</dt>
         <dd class="shop-details__value">{{ formatNumber(shop.usage) }}</dd>
 
@@ -56,22 +59,22 @@
       </section>
 
       <form class="shop-details__form" @submit.prevent="onSubmit">
-        <label class="shop-details__label" :for="noteId">Add a note</label>
+        <label class="shop-details__label" for="note-textarea">Add a note</label>
         <textarea
-          :id="noteId"
+          id="note-textarea"
           v-model="noteContent"
           class="shop-details__textarea"
           :class="{ 'shop-details__textarea--error': showNoteError }"
           rows="4"
           placeholder="Enter your note…"
           :aria-invalid="showNoteError"
-          :aria-describedby="showNoteError ? noteErrorId : undefined"
+          :aria-describedby="showNoteError ? 'note-error' : undefined"
           @input="showNoteError = false"
         />
         <div class="shop-details__error-wrapper" aria-live="polite">
           <p
             v-if="showNoteError"
-            :id="noteErrorId"
+            id="note-error"
             class="shop-details__error"
             role="alert"
           >
@@ -92,7 +95,10 @@ import type { Shop, TenantId, SupportNote } from '@/services/shopApi';
 import { createSupportNote } from '@/services/shopApi';
 import notesFixture from '../../fixtures/notes.json';
 
+// On this component open we would fetch the shop details and notes instead of passing all of it as prop.
+
 const props = defineProps<{
+// it would only pass the shop id and we would fetch the details and notes from the API.
   shop: Shop | null;
   tenantId: TenantId;
 }>();
@@ -100,9 +106,6 @@ const props = defineProps<{
 defineEmits<{
   close: [];
 }>();
-
-const noteId = 'shop-details-note';
-const noteErrorId = 'shop-details-note-error';
 
 const noteContent = ref('');
 const showNoteError = ref(false);
@@ -116,6 +119,7 @@ const notesForShop = computed(() => {
   return [...fixture, ...addedNotes.value];
 });
 
+// There would be no watch - it's unncecssary here, instead I'd wait for response confirming the nota was added and just add it to the list. Reactivity will take care of it.
 watch(
   () => props.shop?.id,
   () => {
@@ -154,6 +158,13 @@ const statusLabel = computed(() => {
   if (s === 'active') return 'Active';
   if (s === 'past_due') return 'Past due';
   return 'Cancelled';
+});
+
+// It would take it from shop details response, no prop here.
+const billingCycleLabel = computed(() => {
+  if (!props.shop?.billing_cycle_start || !props.shop?.billing_cycle_end) return '—';
+  const d = (s: string) => new Date(s + 'T00:00:00Z').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  return `${d(props.shop!.billing_cycle_start)} – ${d(props.shop!.billing_cycle_end)}`;
 });
 
 function formatNumber(n: number) {
