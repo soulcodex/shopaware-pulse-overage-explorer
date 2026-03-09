@@ -1,0 +1,10 @@
+# Managed by agentic library — do not edit manually
+# Regenerate with: just compose typescript-hexagonal-microservice .
+library_commit: "de3ffd3d1b4a1c6891a0e4f340e5dd1ba333467e"
+profile: "typescript-hexagonal-microservice"
+profile_version: "1.0.0"
+composed_at: "2026-03-09T09:54:58Z"
+mode: lean
+agentic_root: "/Users/soulcodex/.local/share/agentic"
+active_vendors:
+  - opencode
