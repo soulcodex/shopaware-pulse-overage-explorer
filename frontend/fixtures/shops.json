@@ -1,0 +1,90 @@
+[
+  {
+    "id": "eu_001",
+    "name": "Blue Bicycle",
+    "plan": "starter",
+    "status": "active",
+    "usage": 250,
+    "included_usage": 200,
+    "overage_charges": 2.5,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "eu_002",
+    "name": "KaffeeKult",
+    "plan": "grow",
+    "status": "active",
+    "usage": 1150,
+    "included_usage": 1000,
+    "overage_charges": 4.5,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "eu_003",
+    "name": "Nordic Gear",
+    "plan": "starter",
+    "status": "past_due",
+    "usage": 210,
+    "included_usage": 200,
+    "overage_charges": 0.5,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "eu_004",
+    "name": "Pet Paradise",
+    "plan": "scale",
+    "status": "active",
+    "usage": 5000,
+    "included_usage": 5000,
+    "overage_charges": 0,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "us_001",
+    "name": "Sunrise Electronics",
+    "plan": "grow",
+    "status": "active",
+    "usage": 1100,
+    "included_usage": 1000,
+    "overage_charges": 3,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "us_002",
+    "name": "Trail Outfitters",
+    "plan": "starter",
+    "status": "active",
+    "usage": 160,
+    "included_usage": 200,
+    "overage_charges": 0,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "us_003",
+    "name": "Book Bazaar",
+    "plan": "starter",
+    "status": "cancelled",
+    "usage": 45,
+    "included_usage": 200,
+    "overage_charges": 0,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "us_004",
+    "name": "Sneaker Hub",
+    "plan": "scale",
+    "status": "active",
+    "usage": 5200,
+    "included_usage": 5000,
+    "overage_charges": 2,
+    "created_at": "2026-03-01T00:00:00Z",
+    "updated_at": "2026-03-31T00:00:00Z"
+  }
+]
