@@ -56,7 +56,12 @@ This departs from the `api-design.md` recommendation of URL path versioning. The
 
 ## Implementation
 
-A `versionGuard` middleware runs after `tenantGuard` on all `/api/*` routes:
+A `versionGuard` middleware runs before `tenantGuard` on all `/api/*` routes. The runtime order is:
+
+1. `requestLogger` — logs request/response
+2. `versionGuard` — validates `X-API-Version` header
+3. `addVaryHeader` — adds `Vary: X-API-Version` to responses
+4. `tenantGuard` — validates `X-Tenant-Id` header
 
 ```
 X-API-Version absent  → treat as v1 (pass through)
@@ -64,7 +69,7 @@ X-API-Version: 1      → pass through
 X-API-Version: 2      → 400 Bad Request (UNSUPPORTED_API_VERSION)
 ```
 
-All responses include `Vary: X-API-Version` to prevent cache collisions.
+Version guard runs before tenant guard because it is a cheaper check with no dependency on header state, and failing early on unsupported versions avoids unnecessary tenant validation work. All responses include `Vary: X-API-Version` to prevent cache collisions.
 
 ## Versioning rules going forward
 
