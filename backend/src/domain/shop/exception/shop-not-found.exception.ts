@@ -1,4 +1,4 @@
-import { ShopId } from '../model/shop-id.js';
+import { ShopId } from '../model/shop-id';
 
 /**
  * Thrown when a shop cannot be found for the given tenant.

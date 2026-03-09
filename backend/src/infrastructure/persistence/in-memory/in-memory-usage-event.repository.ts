@@ -1,7 +1,7 @@
-import { UsageEvent, createUsageEvent } from '../../../domain/shop/usage-event/usage-event.js';
-import { ShopId } from '../../../domain/shop/model/shop-id.js';
-import { TenantId } from '../../../domain/shop/model/tenant-id.js';
-import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository.js';
+import { UsageEvent, createUsageEvent } from '../../../domain/shop/usage-event/usage-event';
+import { ShopId } from '../../../domain/shop/model/shop-id';
+import { TenantId } from '../../../domain/shop/model/tenant-id';
+import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository';
 
 /**
  * In-memory implementation of UsageEventRepository

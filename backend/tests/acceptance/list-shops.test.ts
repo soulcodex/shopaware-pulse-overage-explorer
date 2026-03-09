@@ -1,4 +1,4 @@
-import { createApp, resetRepositories } from '../../src/ports/http/server.js';
+import { createApp, resetRepositories } from '../../src/ports/http/server';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('List Shops API', () => {

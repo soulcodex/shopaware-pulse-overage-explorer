@@ -1,6 +1,6 @@
-import { Shop, ShopStatus } from '../../../domain/shop/model/shop.js';
-import { OverageSummary } from '../../../domain/shop/model/overage-summary.js';
-import { PlanId } from '../../../domain/shop/model/plan.js';
+import { Shop, ShopStatus } from '../../../domain/shop/model/shop';
+import { OverageSummary } from '../../../domain/shop/model/overage-summary';
+import { PlanId } from '../../../domain/shop/model/plan';
 
 /**
  * Shop summary DTO for list response

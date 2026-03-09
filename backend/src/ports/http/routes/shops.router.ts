@@ -1,14 +1,14 @@
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
-import { ShopRepository } from '../../../domain/shop/repository/shop.repository.js';
-import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository.js';
-import { ListShopsHandler } from '../../../application/query/list-shops/list-shops.handler.js';
-import { GetShopDetailHandler } from '../../../application/query/get-shop-detail/get-shop-detail.handler.js';
-import { CreateNoteHandler } from '../../../application/command/create-note/create-note.handler.js';
-import { TenantId } from '../../../domain/shop/model/tenant-id.js';
-import { ShopId } from '../../../domain/shop/model/shop-id.js';
-import { NoteAuthor } from '../../../domain/shop/note/note-author.js';
-import { type AppBindings, TENANT_ID_CONTEXT_KEY, SHOP_ID_CONTEXT_KEY, REQUEST_ID_CONTEXT_KEY } from '../types.js';
+import { ShopRepository } from '../../../domain/shop/repository/shop.repository';
+import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository';
+import { ListShopsHandler } from '../../../application/query/list-shops/list-shops.handler';
+import { GetShopDetailHandler } from '../../../application/query/get-shop-detail/get-shop-detail.handler';
+import { CreateNoteHandler } from '../../../application/command/create-note/create-note.handler';
+import { TenantId } from '../../../domain/shop/model/tenant-id';
+import { ShopId } from '../../../domain/shop/model/shop-id';
+import { NoteAuthor } from '../../../domain/shop/note/note-author';
+import { type AppBindings, TENANT_ID_CONTEXT_KEY, SHOP_ID_CONTEXT_KEY, REQUEST_ID_CONTEXT_KEY } from '../types';
 
 // ---------------------------------------------------------------------------
 // Request / response schemas

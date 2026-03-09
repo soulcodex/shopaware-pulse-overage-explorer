@@ -1,9 +1,9 @@
-import { GetShopDetailQuery } from './get-shop-detail.query.js';
-import { ShopDetailDTO, toShopDetailDTO } from './shop-detail.dto.js';
-import { ShopRepository } from '../../../domain/shop/repository/shop.repository.js';
-import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository.js';
-import { OverageSummary } from '../../../domain/shop/model/overage-summary.js';
-import { ShopNotFoundException } from '../../../domain/shop/exception/shop-not-found.exception.js';
+import { GetShopDetailQuery } from './get-shop-detail.query';
+import { ShopDetailDTO, toShopDetailDTO } from './shop-detail.dto';
+import { ShopRepository } from '../../../domain/shop/repository/shop.repository';
+import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository';
+import { OverageSummary } from '../../../domain/shop/model/overage-summary';
+import { ShopNotFoundException } from '../../../domain/shop/exception/shop-not-found.exception';
 
 /**
  * GetShopDetailHandler - handles the GetShopDetailQuery

@@ -1,6 +1,6 @@
-import { NoteAuthor } from './note-author.js';
-import { ShopId } from '../model/shop-id.js';
-import { TenantId } from '../model/tenant-id.js';
+import { NoteAuthor } from './note-author';
+import { ShopId } from '../model/shop-id';
+import { TenantId } from '../model/tenant-id';
 /**
  * SupportNote entity - child entity of Shop aggregate
  */

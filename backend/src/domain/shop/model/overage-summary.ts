@@ -1,4 +1,4 @@
-import { Plan } from './plan.js';
+import { Plan } from './plan';
 
 /**
  * OverageSummary value object - computed from usage + plan

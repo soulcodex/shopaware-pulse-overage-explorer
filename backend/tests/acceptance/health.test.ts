@@ -1,8 +1,12 @@
-import { createApp } from '../../src/ports/http/server.js';
+import { createApp, resetRepositories } from '../../src/ports/http/server';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('Health API', () => {
   let app: Awaited<ReturnType<typeof createApp>>;
+
+  beforeEach(() => {
+    resetRepositories();
+  });
 
   beforeEach(async () => {
     app = await createApp();

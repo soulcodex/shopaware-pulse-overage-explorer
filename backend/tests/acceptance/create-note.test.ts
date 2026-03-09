@@ -1,4 +1,4 @@
-import { createApp, resetRepositories } from '../../src/ports/http/server.js';
+import { createApp, resetRepositories } from '../../src/ports/http/server';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('Create Note API', () => {
@@ -284,5 +284,67 @@ describe('Create Note API', () => {
     expect(res.status).toBe(400);
     const body = await res.json() as { errors: Array<{ code: string }> };
     expect(body.errors[0].code).toBe('MISSING_TENANT_ID');
+  });
+
+  it('returns 400 when X-Tenant-Id is blank', async () => {
+    const res = await app.request('/api/shops/eu_001/notes', {
+      method: 'POST',
+      headers: {
+        'X-Tenant-Id': '   ',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: {
+          type: 'note',
+          attributes: {
+            author: { id: 'usr_01', name: 'Alice' },
+            content: 'Test note',
+          },
+        },
+      }),
+    });
+
+    expect(res.status).toBe(400);
+    const body = await res.json() as { errors: Array<{ code: string }> };
+    expect(body.errors[0].code).toBe('MISSING_TENANT_ID');
+  });
+
+  it('stored note tenantId comes from X-Tenant-Id header, not from request body', async () => {
+    // Create a note with tenant tnt_eu_01
+    const createRes = await app.request('/api/shops/eu_001/notes', {
+      method: 'POST',
+      headers: {
+        'X-Tenant-Id': 'tnt_eu_01',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: {
+          type: 'note',
+          attributes: {
+            author: { id: 'usr_01', name: 'Alice' },
+            content: 'Note for EU tenant',
+          },
+        },
+      }),
+    });
+
+    expect(createRes.status).toBe(204);
+
+    // Verify the note is accessible with tnt_eu_01
+    const getResEu = await app.request('/api/shops/eu_001', {
+      headers: { 'X-Tenant-Id': 'tnt_eu_01' },
+    });
+
+    expect(getResEu.status).toBe(200);
+    const euBody = await getResEu.json() as { data: { attributes: { notes: Array<{ content: string }> } } };
+    expect(euBody.data.attributes.notes).toHaveLength(1);
+    expect(euBody.data.attributes.notes[0].content).toBe('Note for EU tenant');
+
+    // Verify the note is NOT accessible with tnt_us_01 (different tenant)
+    const getResUs = await app.request('/api/shops/eu_001', {
+      headers: { 'X-Tenant-Id': 'tnt_us_01' },
+    });
+
+    expect(getResUs.status).toBe(404);
   });
 });

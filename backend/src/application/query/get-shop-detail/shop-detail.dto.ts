@@ -1,7 +1,7 @@
-import { Shop, ShopStatus } from '../../../domain/shop/model/shop.js';
-import { OverageSummary } from '../../../domain/shop/model/overage-summary.js';
-import { UsageEvent } from '../../../domain/shop/usage-event/usage-event.js';
-import { PlanId } from '../../../domain/shop/model/plan.js';
+import { Shop, ShopStatus } from '../../../domain/shop/model/shop';
+import { OverageSummary } from '../../../domain/shop/model/overage-summary';
+import { UsageEvent } from '../../../domain/shop/usage-event/usage-event';
+import { PlanId } from '../../../domain/shop/model/plan';
 
 /**
  * Usage event DTO

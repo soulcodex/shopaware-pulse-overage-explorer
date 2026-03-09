@@ -1,5 +1,5 @@
-import { TenantId } from '../../../domain/shop/model/tenant-id.js';
-import { ShopFilters } from '../../../domain/shop/repository/shop.repository.js';
+import { TenantId } from '../../../domain/shop/model/tenant-id';
+import { ShopFilters } from '../../../domain/shop/repository/shop.repository';
 
 /**
  * ListShopsQuery - query to list shops

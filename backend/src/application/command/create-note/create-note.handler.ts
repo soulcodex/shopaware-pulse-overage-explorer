@@ -1,7 +1,7 @@
-import { CreateNoteCommand } from './create-note.command.js';
-import { ShopRepository } from '../../../domain/shop/repository/shop.repository.js';
-import { createSupportNote } from '../../../domain/shop/note/support-note.js';
-import { ShopNotFoundException } from '../../../domain/shop/exception/shop-not-found.exception.js';
+import { CreateNoteCommand } from './create-note.command';
+import { ShopRepository } from '../../../domain/shop/repository/shop.repository';
+import { createSupportNote } from '../../../domain/shop/note/support-note';
+import { ShopNotFoundException } from '../../../domain/shop/exception/shop-not-found.exception';
 
 /**
  * CreateNoteHandler - handles the CreateNoteCommand

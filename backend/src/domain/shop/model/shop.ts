@@ -1,8 +1,8 @@
-import { ShopId } from './shop-id.js';
-import { TenantId } from './tenant-id.js';
-import { Plan, PlanId, getPlan } from './plan.js';
-import { BillingCycle } from './billing-cycle.js';
-import { SupportNote } from '../note/support-note.js';
+import { ShopId } from './shop-id';
+import { TenantId } from './tenant-id';
+import { Plan, PlanId, getPlan } from './plan';
+import { BillingCycle } from './billing-cycle';
+import { SupportNote } from '../note/support-note';
 
 /**
  * Shop status

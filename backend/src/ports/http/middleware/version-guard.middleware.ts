@@ -1,5 +1,5 @@
 import type { Context, Next } from 'hono';
-import { REQUEST_ID_CONTEXT_KEY } from '../types.js';
+import { REQUEST_ID_CONTEXT_KEY } from '../types';
 
 /**
  * Supported API versions

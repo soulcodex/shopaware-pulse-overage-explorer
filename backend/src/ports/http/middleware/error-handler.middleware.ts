@@ -1,6 +1,6 @@
 import type { Context } from 'hono';
 import { ZodError } from 'zod';
-import { REQUEST_ID_CONTEXT_KEY } from '../types.js';
+import { REQUEST_ID_CONTEXT_KEY } from '../types';
 
 // ---------------------------------------------------------------------------
 // Exception registry

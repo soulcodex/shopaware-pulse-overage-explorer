@@ -1,8 +1,8 @@
 import type { Context, Next } from 'hono';
-import { TENANT_ID_CONTEXT_KEY, REQUEST_ID_CONTEXT_KEY } from '../types.js';
+import { TENANT_ID_CONTEXT_KEY, REQUEST_ID_CONTEXT_KEY } from '../types';
 
 // Re-export for convenience
-export { TENANT_ID_CONTEXT_KEY } from '../types.js';
+export { TENANT_ID_CONTEXT_KEY } from '../types';
 
 /**
  * Tenant guard middleware - validates X-Tenant-Id header

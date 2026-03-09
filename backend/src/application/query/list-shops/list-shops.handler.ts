@@ -1,8 +1,8 @@
-import { ListShopsQuery } from './list-shops.query.js';
-import { ShopSummaryDTO, toShopSummaryDTO } from './shop-summary.dto.js';
-import { ShopRepository } from '../../../domain/shop/repository/shop.repository.js';
-import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository.js';
-import { OverageSummary } from '../../../domain/shop/model/overage-summary.js';
+import { ListShopsQuery } from './list-shops.query';
+import { ShopSummaryDTO, toShopSummaryDTO } from './shop-summary.dto';
+import { ShopRepository } from '../../../domain/shop/repository/shop.repository';
+import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository';
+import { OverageSummary } from '../../../domain/shop/model/overage-summary';
 
 /**
  * ListShopsHandler - handles the ListShopsQuery

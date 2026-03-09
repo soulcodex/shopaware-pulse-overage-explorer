@@ -1,6 +1,6 @@
-import { ShopId } from '../../../domain/shop/model/shop-id.js';
-import { TenantId } from '../../../domain/shop/model/tenant-id.js';
-import { NoteAuthor } from '../../../domain/shop/note/note-author.js';
+import { ShopId } from '../../../domain/shop/model/shop-id';
+import { TenantId } from '../../../domain/shop/model/tenant-id';
+import { NoteAuthor } from '../../../domain/shop/note/note-author';
 
 /**
  * CreateNoteCommand - command to create a support note

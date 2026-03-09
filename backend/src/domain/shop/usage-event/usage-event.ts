@@ -1,5 +1,5 @@
-import { ShopId } from '../model/shop-id.js';
-import { TenantId } from '../model/tenant-id.js';
+import { ShopId } from '../model/shop-id';
+import { TenantId } from '../model/tenant-id';
 
 /**
  * UsageEvent - read model entity for usage tracking

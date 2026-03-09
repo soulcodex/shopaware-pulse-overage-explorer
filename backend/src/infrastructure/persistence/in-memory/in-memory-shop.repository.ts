@@ -1,8 +1,8 @@
-import { Shop, createShop, ShopStatus } from '../../../domain/shop/model/shop.js';
-import { ShopId } from '../../../domain/shop/model/shop-id.js';
-import { TenantId } from '../../../domain/shop/model/tenant-id.js';
-import { ShopRepository, ShopFilters } from '../../../domain/shop/repository/shop.repository.js';
-import type { PlanId } from '../../../domain/shop/model/plan.js';
+import { Shop, createShop, ShopStatus } from '../../../domain/shop/model/shop';
+import { ShopId } from '../../../domain/shop/model/shop-id';
+import { TenantId } from '../../../domain/shop/model/tenant-id';
+import { ShopRepository, ShopFilters } from '../../../domain/shop/repository/shop.repository';
+import type { PlanId } from '../../../domain/shop/model/plan';
 
 /**
  * In-memory implementation of ShopRepository

@@ -1,5 +1,5 @@
-import { TenantId } from '../../../domain/shop/model/tenant-id.js';
-import { ShopId } from '../../../domain/shop/model/shop-id.js';
+import { TenantId } from '../../../domain/shop/model/tenant-id';
+import { ShopId } from '../../../domain/shop/model/shop-id';
 
 /**
  * GetShopDetailQuery - query to get shop details

@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
-import { InMemoryShopRepository } from './in-memory-shop.repository.js';
-import { InMemoryUsageEventRepository } from './in-memory-usage-event.repository.js';
-import { ShopStatus } from '../../../domain/shop/model/shop.js';
+import { InMemoryShopRepository } from './in-memory-shop.repository';
+import { InMemoryUsageEventRepository } from './in-memory-usage-event.repository';
+import { ShopStatus } from '../../../domain/shop/model/shop';
 
 /**
  * Seed data structure from JSON file

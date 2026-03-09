@@ -1,6 +1,6 @@
-import { TenantId } from '../model/tenant-id.js';
-import { ShopId } from '../model/shop-id.js';
-import { UsageEvent } from '../usage-event/usage-event.js';
+import { TenantId } from '../model/tenant-id';
+import { ShopId } from '../model/shop-id';
+import { UsageEvent } from '../usage-event/usage-event';
 
 /**
  * UsageEventRepository port - read-only query interface

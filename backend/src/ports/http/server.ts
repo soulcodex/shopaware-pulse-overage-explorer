@@ -1,15 +1,15 @@
 import { Hono } from 'hono';
 import { swaggerUI } from '@hono/swagger-ui';
-import { requestLogger } from './middleware/request-logger.middleware.js';
-import { versionGuard } from './middleware/version-guard.middleware.js';
-import { tenantGuard } from './middleware/tenant-guard.middleware.js';
-import { errorHandler } from './middleware/error-handler.middleware.js';
-import { addVaryHeader } from './middleware/vary-header.middleware.js';
-import { createShopsRouter } from './routes/shops.router.js';
-import { createHealthRouter } from './routes/health.router.js';
-import { InMemoryShopRepository } from '../../infrastructure/persistence/in-memory/in-memory-shop.repository.js';
-import { InMemoryUsageEventRepository } from '../../infrastructure/persistence/in-memory/in-memory-usage-event.repository.js';
-import { SeedLoader } from '../../infrastructure/persistence/in-memory/seed-loader.js';
+import { requestLogger } from './middleware/request-logger.middleware';
+import { versionGuard } from './middleware/version-guard.middleware';
+import { tenantGuard } from './middleware/tenant-guard.middleware';
+import { errorHandler } from './middleware/error-handler.middleware';
+import { addVaryHeader } from './middleware/vary-header.middleware';
+import { createShopsRouter } from './routes/shops.router';
+import { createHealthRouter } from './routes/health.router';
+import { InMemoryShopRepository } from '../../infrastructure/persistence/in-memory/in-memory-shop.repository';
+import { InMemoryUsageEventRepository } from '../../infrastructure/persistence/in-memory/in-memory-usage-event.repository';
+import { SeedLoader } from '../../infrastructure/persistence/in-memory/seed-loader';
 import { join } from 'path';
 
 /**

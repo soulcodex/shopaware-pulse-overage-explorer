@@ -1,6 +1,6 @@
-import { TenantId } from '../model/tenant-id.js';
-import { ShopId } from '../model/shop-id.js';
-import { Shop } from '../model/shop.js';
+import { TenantId } from '../model/tenant-id';
+import { ShopId } from '../model/shop-id';
+import { Shop } from '../model/shop';
 
 /**
  * Shop status filter type

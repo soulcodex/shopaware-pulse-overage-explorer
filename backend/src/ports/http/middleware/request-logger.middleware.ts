@@ -1,5 +1,5 @@
 import type { Context, Next } from 'hono';
-import { REQUEST_ID_CONTEXT_KEY, SHOP_ID_CONTEXT_KEY, TENANT_ID_CONTEXT_KEY } from '../types.js';
+import { REQUEST_ID_CONTEXT_KEY, SHOP_ID_CONTEXT_KEY, TENANT_ID_CONTEXT_KEY } from '../types';
 
 /**
  * Request logger middleware - generates request ID and logs request completion
