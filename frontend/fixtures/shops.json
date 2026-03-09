@@ -1,0 +1,46 @@
+[
+  {
+    "id": "shop_1",
+    "name": "Acme Apparel",
+    "plan": "starter",
+    "status": "active",
+    "usage": 8500,
+    "included_usage": 10000,
+    "overage_charges": 0,
+    "created_at": "2025-12-01T10:00:00Z",
+    "updated_at": "2026-03-01T09:30:00Z"
+  },
+  {
+    "id": "shop_2",
+    "name": "Glow Cosmetics",
+    "plan": "grow",
+    "status": "active",
+    "usage": 13500,
+    "included_usage": 12000,
+    "overage_charges": 75.5,
+    "created_at": "2025-11-15T08:15:00Z",
+    "updated_at": "2026-03-02T13:45:00Z"
+  },
+  {
+    "id": "shop_3",
+    "name": "Urban Gadgets",
+    "plan": "scale",
+    "status": "past_due",
+    "usage": 42000,
+    "included_usage": 30000,
+    "overage_charges": 380.0,
+    "created_at": "2025-10-05T14:20:00Z",
+    "updated_at": "2026-03-03T16:10:00Z"
+  },
+  {
+    "id": "shop_4",
+    "name": "Home & Hearth",
+    "plan": "grow",
+    "status": "cancelled",
+    "usage": 6000,
+    "included_usage": 8000,
+    "overage_charges": 0,
+    "created_at": "2025-09-10T12:00:00Z",
+    "updated_at": "2026-02-20T11:00:00Z"
+  }
+]
