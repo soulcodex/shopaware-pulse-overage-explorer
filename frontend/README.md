@@ -1,9 +1,19 @@
-# Project Thoughts [I'll be updating this on my break, so please check back later]
-1. Dashboard:
-    -Used Meteor Component Library for dashboard to speed up development.
-    -Used JSON fixtures for data.
-    - I'd indicate better shops with overage.
-    - I'd consider showing some information about comments on the dashboard table.
-2. Shop Details:
-    - I'd rather make it max height and overlapping the table. Also, I'd query params to url so sharing dashboard with already selected shop is possible.
-3. Notes:
+## Getting started
+
+To run the frontend locally:
+
+1. **Install dependencies**
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. **Start the dev server**
+   ```bash
+   npm run dev
+   ```
+
+3. **Open the app**
+   - By default Vite will print the local URL (for example `http://localhost:5173`).
+   - Open it in your browser to see the Pulse Overage Explorer dashboard.
+
