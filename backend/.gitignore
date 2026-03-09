@@ -9,3 +9,9 @@ opencode.json
 .agents/skills
 node_modules/
 dist/
+
+# TypeScript compiled output (tests are run from .ts sources via Vitest)
+tests/**/*.js
+tests/**/*.js.map
+tests/**/*.d.ts
+tests/**/*.d.ts.map
