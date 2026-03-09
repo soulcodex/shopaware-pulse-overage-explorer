@@ -1,0 +1,46 @@
+import { ListShopsQuery } from './list-shops.query.js';
+import { ShopSummaryDTO, toShopSummaryDTO } from './shop-summary.dto.js';
+import { ShopRepository } from '../../../domain/shop/repository/shop.repository.js';
+import { UsageEventRepository } from '../../../domain/shop/repository/usage-event.repository.js';
+import { OverageSummary } from '../../../domain/shop/model/overage-summary.js';
+
+/**
+ * ListShopsHandler - handles the ListShopsQuery
+ */
+export class ListShopsHandler {
+  constructor(
+    private readonly shopRepository: ShopRepository,
+    private readonly usageEventRepository: UsageEventRepository
+  ) {}
+
+  async handle(query: ListShopsQuery): Promise<ShopSummaryDTO[]> {
+    // Get all shops for the tenant with filters
+    const shops = await this.shopRepository.findAll(query.tenantId, query.filters);
+
+    // Get all usage events for the tenant
+    const allEvents = await this.usageEventRepository.findAllByTenantId(query.tenantId);
+
+    // Create a map of shopId -> total orders
+    const ordersByShop = new Map<string, number>();
+    for (const event of allEvents) {
+      const current = ordersByShop.get(event.shopId.value) ?? 0;
+      ordersByShop.set(event.shopId.value, current + event.orders);
+    }
+
+    // Compute overage summary for each shop and map to DTO
+    const results = shops.map((shop) => {
+      const totalOrders = ordersByShop.get(shop.id.value) ?? 0;
+      const overageSummary = new OverageSummary({ totalOrders, plan: shop.plan });
+      return toShopSummaryDTO(shop, overageSummary);
+    });
+
+    // Apply sorting if specified
+    if (query.filters.sort === '-overage_charges') {
+      results.sort((a, b) => b.attributes.overage_charges - a.attributes.overage_charges);
+    } else if (query.filters.sort === '-name') {
+      results.sort((a, b) => b.attributes.name.localeCompare(a.attributes.name));
+    }
+
+    return results;
+  }
+}

@@ -1,0 +1,23 @@
+default:
+    @just --list
+
+# Start the development server with hot-reload
+dev:
+    pnpm dev
+
+# Compile TypeScript to dist/
+build:
+    pnpm build
+
+# Run the test suite once (CI-safe)
+test:
+    pnpm test --run
+
+# Run ESLint across the project
+lint:
+    pnpm lint
+
+# Lint + test — run before pushing
+check:
+    just lint
+    just test
