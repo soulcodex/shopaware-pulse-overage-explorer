@@ -90,6 +90,6 @@ export function createShop(data: {
     }),
     createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
     updatedAt: data.updatedAt ? new Date(data.updatedAt) : new Date(),
-    notes: data.notes,
+    ...(data.notes !== undefined && { notes: data.notes }),
   });
 }

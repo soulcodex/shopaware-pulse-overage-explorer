@@ -8,9 +8,12 @@ import { CreateNoteHandler } from '../../../application/command/create-note/crea
 import { TenantId } from '../../../domain/shop/model/tenant-id.js';
 import { ShopId } from '../../../domain/shop/model/shop-id.js';
 import { NoteAuthor } from '../../../domain/shop/note/note-author.js';
-import { TENANT_ID_CONTEXT_KEY, SHOP_ID_CONTEXT_KEY, REQUEST_ID_CONTEXT_KEY } from '../types.js';
+import { type AppBindings, TENANT_ID_CONTEXT_KEY, SHOP_ID_CONTEXT_KEY, REQUEST_ID_CONTEXT_KEY } from '../types.js';
 
-// Schema for list shops query params
+// ---------------------------------------------------------------------------
+// Request / response schemas
+// ---------------------------------------------------------------------------
+
 const ListShopsQuerySchema = z.object({
   search: z.string().optional(),
   plan: z.enum(['starter', 'grow', 'scale']).optional(),
@@ -18,8 +21,7 @@ const ListShopsQuerySchema = z.object({
   sort: z.enum(['-overage_charges', '-name']).optional(),
 });
 
-// Schema for create note request body
-const CreateNoteRequestSchema = z.object({
+const CreateNoteBodySchema = z.object({
   data: z.object({
     type: z.literal('note'),
     attributes: z.object({
@@ -27,32 +29,66 @@ const CreateNoteRequestSchema = z.object({
         id: z.string().min(1),
         name: z.string().min(1),
       }),
-      content: z.string().min(1),
+      content: z.string().trim().min(1, "'content' must not be blank"),
     }),
   }),
 });
 
-// Route definitions
+const JsonApiErrorSchema = z.object({
+  errors: z.array(
+    z.object({
+      status: z.string(),
+      code: z.string(),
+      title: z.string(),
+      detail: z.string(),
+      source: z.object({ pointer: z.string() }).optional(),
+    }),
+  ),
+  meta: z.object({ request_id: z.string() }),
+});
+
+// ---------------------------------------------------------------------------
+// Router factory
+// ---------------------------------------------------------------------------
+
 export function createShopsRouter(
   shopRepository: ShopRepository,
-  usageEventRepository: UsageEventRepository
-): OpenAPIHono {
-  const app = new OpenAPIHono();
+  usageEventRepository: UsageEventRepository,
+): OpenAPIHono<AppBindings> {
+  const app = new OpenAPIHono<AppBindings>({
+    defaultHook: (result, c) => {
+      if (result.success) return;
+
+      const requestId = c.get(REQUEST_ID_CONTEXT_KEY) ?? 'unknown';
+      const errors = result.error.issues.map((issue) => ({
+        status: '400',
+        code: 'VALIDATION_ERROR',
+        title: 'Validation failed',
+        detail: issue.message,
+        source: { pointer: '/' + issue.path.join('/') },
+      }));
+
+      return c.json({ errors, meta: { request_id: requestId } }, 400, {
+        Vary: 'X-API-Version',
+      });
+    },
+  });
 
   const listShopsHandler = new ListShopsHandler(shopRepository, usageEventRepository);
   const getShopDetailHandler = new GetShopDetailHandler(shopRepository, usageEventRepository);
   const createNoteHandler = new CreateNoteHandler(shopRepository);
 
+  // -------------------------------------------------------------------------
   // GET /api/shops
+  // -------------------------------------------------------------------------
+
   const listShopsRoute = createRoute({
     method: 'get',
     path: '/api/shops',
     tags: ['Shops'],
-    summary: 'List all shops',
-    description: 'Returns a list of shops for the authenticated tenant',
-    request: {
-      query: ListShopsQuerySchema,
-    },
+    summary: 'List shops for tenant',
+    description: 'Returns all shops scoped to the authenticated tenant with computed overage summaries.',
+    request: { query: ListShopsQuerySchema },
     responses: {
       200: {
         description: 'List of shops',
@@ -73,66 +109,38 @@ export function createShopsRouter(
                     created_at: z.string(),
                     updated_at: z.string(),
                   }),
-                })
+                }),
               ),
-              meta: z.object({
-                request_id: z.string(),
-              }),
+              meta: z.object({ request_id: z.string() }),
             }),
           },
         },
       },
-      400: {
-        description: 'Bad request',
-        content: {
-          'application/json': {
-            schema: z.object({
-              errors: z.array(z.object({
-                status: z.string(),
-                code: z.string(),
-                title: z.string(),
-                detail: z.string(),
-              })),
-              meta: z.object({
-                request_id: z.string(),
-              }),
-            }),
-          },
-        },
-      },
+      400: { description: 'Bad request', content: { 'application/json': { schema: JsonApiErrorSchema } } },
     },
   });
 
-  // @ts-expect-error - Hono/zod-openapi typing issue
   app.openapi(listShopsRoute, async (c) => {
-    const tenantId = new TenantId((c as any).get(TENANT_ID_CONTEXT_KEY));
-    const query = c.req.query();
-    const filters = {
-      search: query.search,
-      plan: query.plan as 'starter' | 'grow' | 'scale' | undefined,
-      status: query.status as 'active' | 'past_due' | 'cancelled' | undefined,
-      sort: query.sort as '-overage_charges' | '-name' | undefined,
-    };
+    const tenantId = new TenantId(c.get(TENANT_ID_CONTEXT_KEY));
+    const query = c.req.valid('query');
 
-    const shops = await listShopsHandler.handle({ tenantId, filters });
+    const shops = await listShopsHandler.handle({ tenantId, filters: query });
 
-    return c.json({
-      data: shops,
-      meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) },
-    });
+    return c.json({ data: shops, meta: { request_id: c.get(REQUEST_ID_CONTEXT_KEY) } }, 200);
   });
 
+  // -------------------------------------------------------------------------
   // GET /api/shops/:shopId
+  // -------------------------------------------------------------------------
+
   const getShopDetailRoute = createRoute({
     method: 'get',
     path: '/api/shops/{shopId}',
     tags: ['Shops'],
     summary: 'Get shop detail',
-    description: 'Returns detailed information about a specific shop',
+    description: 'Returns full detail for a shop including billing cycle, overage summary, usage events and notes.',
     request: {
-      params: z.object({
-        shopId: z.string(),
-      }),
+      params: z.object({ shopId: z.string() }),
     },
     responses: {
       200: {
@@ -155,343 +163,105 @@ export function createShopsRouter(
                     overage_orders: z.number(),
                     overage_charges: z.number(),
                   }),
-                  usage: z.array(z.object({
-                    id: z.string(),
-                    timestamp: z.string(),
-                    orders: z.number(),
-                    gmv_eur: z.number(),
-                  })),
-                  notes: z.array(z.object({
-                    id: z.string(),
-                    author: z.object({
+                  usage: z.array(
+                    z.object({
                       id: z.string(),
-                      name: z.string(),
+                      timestamp: z.string(),
+                      orders: z.number(),
+                      gmv_eur: z.number(),
                     }),
-                    content: z.string(),
-                    created_at: z.string(),
-                  })),
+                  ),
+                  notes: z.array(
+                    z.object({
+                      id: z.string(),
+                      author: z.object({ id: z.string(), name: z.string() }),
+                      content: z.string(),
+                      created_at: z.string(),
+                    }),
+                  ),
                   created_at: z.string(),
                   updated_at: z.string(),
                 }),
               }),
-              meta: z.object({
-                request_id: z.string(),
-              }),
+              meta: z.object({ request_id: z.string() }),
             }),
           },
         },
       },
-      400: {
-        description: 'Bad request',
-        content: {
-          'application/json': {
-            schema: z.object({
-              errors: z.array(z.object({
-                status: z.string(),
-                code: z.string(),
-                title: z.string(),
-                detail: z.string(),
-              })),
-              meta: z.object({
-                request_id: z.string(),
-              }),
-            }),
-          },
-        },
-      },
-      404: {
-        description: 'Shop not found',
-        content: {
-          'application/json': {
-            schema: z.object({
-              errors: z.array(z.object({
-                status: z.string(),
-                code: z.string(),
-                title: z.string(),
-                detail: z.string(),
-              })),
-              meta: z.object({
-                request_id: z.string(),
-              }),
-            }),
-          },
-        },
-      },
+      400: { description: 'Bad request', content: { 'application/json': { schema: JsonApiErrorSchema } } },
+      404: { description: 'Shop not found', content: { 'application/json': { schema: JsonApiErrorSchema } } },
     },
   });
 
-  // @ts-expect-error - Hono/zod-openapi typing issue
   app.openapi(getShopDetailRoute, async (c) => {
-    const { shopId } = c.req.param();
-    const tenantId = new TenantId((c as any).get(TENANT_ID_CONTEXT_KEY) as string);
-    
-    // Set shop ID for logging
-    (c as any).set(SHOP_ID_CONTEXT_KEY, shopId);
+    const { shopId } = c.req.valid('param');
+    const tenantId = new TenantId(c.get(TENANT_ID_CONTEXT_KEY));
 
-    try {
-      const shop = await getShopDetailHandler.handle({
-        tenantId,
-        shopId: new ShopId(shopId),
-      });
+    c.set(SHOP_ID_CONTEXT_KEY, shopId);
 
-      return c.json({
-        data: shop,
-        meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-      });
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('not found') && error.message.includes('Shop with id')) {
-        const match = error.message.match(/Shop with id '([^']+)'/);
-        const foundShopId = match ? match[1] : shopId;
-        return c.json(
-          {
-            errors: [
-              {
-                status: '404',
-                code: 'SHOP_NOT_FOUND',
-                title: 'Shop not found',
-                detail: `No shop with id '${foundShopId}' was found`,
-              },
-            ],
-            meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-          },
-          404,
-          { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
-        );
-      }
-      throw error;
-    }
+    // ShopNotFoundException (HttpException) propagates to the global error handler — no local catch needed
+    const shop = await getShopDetailHandler.handle({ tenantId, shopId: new ShopId(shopId) });
+
+    return c.json({ data: shop, meta: { request_id: c.get(REQUEST_ID_CONTEXT_KEY) } }, 200);
   });
 
+  // -------------------------------------------------------------------------
   // POST /api/shops/:shopId/notes
+  // -------------------------------------------------------------------------
+
   const createNoteRoute = createRoute({
     method: 'post',
     path: '/api/shops/{shopId}/notes',
     tags: ['Shops'],
-    summary: 'Create a support note',
-    description: 'Creates a new support note for a shop',
+    summary: 'Create support note',
+    description: 'Creates a new internal support note for a shop.',
     request: {
-      params: z.object({
-        shopId: z.string(),
-      }),
+      params: z.object({ shopId: z.string() }),
+      body: {
+        content: { 'application/json': { schema: CreateNoteBodySchema } },
+        required: true,
+      },
     },
     responses: {
-      204: {
-        description: 'Note created successfully',
-      },
-      400: {
-        description: 'Bad request',
-        content: {
-          'application/json': {
-            schema: z.object({
-              errors: z.array(z.object({
-                status: z.string(),
-                code: z.string(),
-                title: z.string(),
-                detail: z.string(),
-                source: z.object({
-                  pointer: z.string(),
-                }).optional(),
-              })),
-              meta: z.object({
-                request_id: z.string(),
-              }),
-            }),
-          },
-        },
-      },
-      404: {
-        description: 'Shop not found',
-        content: {
-          'application/json': {
-            schema: z.object({
-              errors: z.array(z.object({
-                status: z.string(),
-                code: z.string(),
-                title: z.string(),
-                detail: z.string(),
-              })),
-              meta: z.object({
-                request_id: z.string(),
-              }),
-            }),
-          },
-        },
-      },
+      204: { description: 'Note created successfully' },
+      400: { description: 'Validation error', content: { 'application/json': { schema: JsonApiErrorSchema } } },
+      404: { description: 'Shop not found', content: { 'application/json': { schema: JsonApiErrorSchema } } },
     },
   });
 
   app.openapi(createNoteRoute, async (c) => {
-    const { shopId } = c.req.param();
-    const tenantId = new TenantId((c as any).get(TENANT_ID_CONTEXT_KEY) as string);
+    const { shopId } = c.req.valid('param');
+    const body = c.req.valid('json');
+    const tenantId = new TenantId(c.get(TENANT_ID_CONTEXT_KEY));
 
-    // Parse and validate request body manually using Zod
-    let bodyRaw;
-    try {
-      bodyRaw = await c.req.json();
-    } catch {
-      return c.json(
-        {
-          errors: [
-            {
-              status: '400',
-              code: 'VALIDATION_ERROR',
-              title: 'Validation failed',
-              detail: 'Invalid JSON body',
-            },
-          ],
-          meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-        },
-        400,
-        { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
-      );
-    }
-
-    // Validate with Zod
-    const parseResult = CreateNoteRequestSchema.safeParse(bodyRaw);
-    if (!parseResult.success) {
-      const firstIssue = parseResult.error.issues[0];
-      if (!firstIssue) {
-        return c.json(
-          {
-            errors: [
-              {
-                status: '400',
-                code: 'VALIDATION_ERROR',
-                title: 'Validation failed',
-                detail: 'Unknown validation error',
-              },
-            ],
-            meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-          },
-          400,
-          { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
-        );
-      }
-      const pointer = '/' + firstIssue.path.join('/');
-      return c.json(
-        {
-          errors: [
-            {
-              status: '400',
-              code: 'VALIDATION_ERROR',
-              title: 'Validation failed',
-              detail: firstIssue.message,
-              source: { pointer },
-            },
-          ],
-          meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-        },
-        400,
-        { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
-      );
-    }
-
-    const body = parseResult.data;
-    
-    // Additional validation
-    if (body.data.type !== 'note') {
-      return c.json(
-        {
-          errors: [
-            {
-              status: '400',
-              code: 'VALIDATION_ERROR',
-              title: 'Validation failed',
-              detail: "data.type must be 'note'",
-              source: { pointer: '/data/type' },
-            },
-          ],
-          meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-        },
-        400,
-        { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
-      );
-    }
-
-    if (!body.data.attributes.content || body.data.attributes.content.trim().length === 0) {
-      return c.json(
-        {
-          errors: [
-            {
-              status: '400',
-              code: 'VALIDATION_ERROR',
-              title: 'Validation failed',
-              detail: "'content' must not be blank",
-              source: { pointer: '/data/attributes/content' },
-            },
-          ],
-          meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-        },
-        400,
-        { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
-      );
-    }
-
-    if (!body.data.attributes.author) {
-      return c.json(
-        {
-          errors: [
-            {
-              status: '400',
-              code: 'VALIDATION_ERROR',
-              title: 'Validation failed',
-              detail: "'author' is required",
-              source: { pointer: '/data/attributes/author' },
-            },
-          ],
-          meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-        },
-        400,
-        { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
-      );
-    }
+    c.set(SHOP_ID_CONTEXT_KEY, shopId);
 
     const author = new NoteAuthor({
       id: body.data.attributes.author.id,
       name: body.data.attributes.author.name,
     });
 
-    try {
-      await createNoteHandler.handle({
-        tenantId,
-        shopId: new ShopId(shopId),
-        author,
-        content: body.data.attributes.content,
-      });
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('not found') && error.message.includes('Shop with id')) {
-        return c.json(
-          {
-            errors: [
-              {
-                status: '404',
-                code: 'SHOP_NOT_FOUND',
-                title: 'Shop not found',
-                detail: `No shop with id '${shopId}' was found`,
-              },
-            ],
-            meta: { request_id: (c as any).get(REQUEST_ID_CONTEXT_KEY) as string },
-          },
-          404,
-          { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
-        );
-      }
-      throw error;
-    }
-
-    return c.body(null, 204, {
-      'Content-Type': 'application/json',
-      'Vary': 'X-API-Version',
+    // ShopNotFoundException (HttpException) propagates to the global error handler — no local catch needed
+    await createNoteHandler.handle({
+      tenantId,
+      shopId: new ShopId(shopId),
+      author,
+      content: body.data.attributes.content,
     });
+
+    return c.body(null, 204);
   });
 
-  // Add OpenAPI spec endpoint
+  // -------------------------------------------------------------------------
+  // OpenAPI spec endpoint
+  // -------------------------------------------------------------------------
+
   app.doc31('/api/openapi', {
     openapi: '3.1.0',
     info: {
       title: 'Pulse Overage Explorer API',
       version: '1.0.0',
-      description: 'API for managing shops and support notes',
+      description: 'Multi-tenant HTTP API for shop usage overage calculation and internal support notes.',
     },
   });
 

@@ -21,10 +21,10 @@ export type ShopSortOption = '-overage_charges' | '-name';
  * Filters for listing shops
  */
 export interface ShopFilters {
-  search?: string;
-  plan?: PlanFilter;
-  status?: ShopStatusFilter;
-  sort?: ShopSortOption;
+  search?: string | undefined;
+  plan?: PlanFilter | undefined;
+  status?: ShopStatusFilter | undefined;
+  sort?: ShopSortOption | undefined;
 }
 
 /**

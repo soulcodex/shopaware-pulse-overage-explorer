@@ -61,10 +61,7 @@ export async function createApp(): Promise<Hono> {
   // Create app
   const app = new Hono();
 
-  // Global middleware
-  app.use('*', errorHandler);
-
-  // Health routes (no guards)
+  // Health routes (no guards, registered before API middleware)
   const healthRouter = createHealthRouter();
   app.route('/', healthRouter);
 
@@ -77,6 +74,11 @@ export async function createApp(): Promise<Hono> {
   // Shops router
   const shopsRouter = createShopsRouter(shopRepository, usageEventRepository);
   app.route('/', shopsRouter);
+
+  // Global error handler — must use app.onError so it catches errors thrown
+  // inside mounted subrouters (app.route). A use('*') middleware only wraps
+  // routes registered directly on this app instance, not subrouter handlers.
+  app.onError(errorHandler);
 
   // Swagger UI
   app.get('/docs', swaggerUI({ url: '/api/openapi' }));

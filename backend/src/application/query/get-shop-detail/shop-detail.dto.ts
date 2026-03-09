@@ -1,6 +1,7 @@
-import { Shop } from '../../../domain/shop/model/shop.js';
+import { Shop, ShopStatus } from '../../../domain/shop/model/shop.js';
 import { OverageSummary } from '../../../domain/shop/model/overage-summary.js';
 import { UsageEvent } from '../../../domain/shop/usage-event/usage-event.js';
+import { PlanId } from '../../../domain/shop/model/plan.js';
 
 /**
  * Usage event DTO
@@ -33,8 +34,8 @@ export interface ShopDetailDTO {
   type: 'shop';
   attributes: {
     name: string;
-    plan: string;
-    status: string;
+    plan: PlanId;
+    status: ShopStatus;
     billing_cycle_start: string;
     billing_cycle_end: string;
     summary: {

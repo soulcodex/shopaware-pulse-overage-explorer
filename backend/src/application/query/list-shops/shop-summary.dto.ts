@@ -1,5 +1,6 @@
-import { Shop } from '../../../domain/shop/model/shop.js';
+import { Shop, ShopStatus } from '../../../domain/shop/model/shop.js';
 import { OverageSummary } from '../../../domain/shop/model/overage-summary.js';
+import { PlanId } from '../../../domain/shop/model/plan.js';
 
 /**
  * Shop summary DTO for list response
@@ -9,8 +10,8 @@ export interface ShopSummaryDTO {
   type: 'shop';
   attributes: {
     name: string;
-    plan: string;
-    status: string;
+    plan: PlanId;
+    status: ShopStatus;
     usage: number;
     included_usage: number;
     overage_charges: number;
