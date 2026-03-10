@@ -18,6 +18,16 @@ export class Plan {
     includedOrders: number;
     overagePerOrderCents: number;
   }) {
+    // Validate overagePerOrderCents is a non-negative integer
+    if (!Number.isInteger(data.overagePerOrderCents) || data.overagePerOrderCents < 0) {
+      throw new Error('overagePerOrderCents must be a non-negative integer');
+    }
+
+    // Validate includedOrders is a positive integer
+    if (!Number.isInteger(data.includedOrders) || data.includedOrders <= 0) {
+      throw new Error('includedOrders must be a positive integer');
+    }
+
     this.id = data.id;
     this.name = data.name;
     this.includedOrders = data.includedOrders;

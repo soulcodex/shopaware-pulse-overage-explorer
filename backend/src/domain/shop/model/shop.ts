@@ -64,6 +64,15 @@ export class Shop {
 }
 
 /**
+ * Validates that a date is valid
+ */
+function assertValidDate(date: Date, label: string): void {
+  if (isNaN(date.getTime())) {
+    throw new Error(`Invalid date for ${label}`);
+  }
+}
+
+/**
  * Shop factory - creates a Shop from raw seed data
  */
 export function createShop(
@@ -84,6 +93,16 @@ export function createShop(
   // Use provided plans from seed, or fall back to static PLANS registry
   const plan = plans?.get(data.planId) ?? getPlan(data.planId);
 
+  const billingCycleStart = new Date(data.billingCycleStart);
+  const billingCycleEnd = new Date(data.billingCycleEnd);
+  assertValidDate(billingCycleStart, 'billing cycle start');
+  assertValidDate(billingCycleEnd, 'billing cycle end');
+
+  const createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
+  const updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
+  assertValidDate(createdAt, 'createdAt');
+  assertValidDate(updatedAt, 'updatedAt');
+
   return new Shop({
     id: new ShopId(data.id),
     tenantId: new TenantId(data.tenantId),
@@ -91,11 +110,11 @@ export function createShop(
     status: data.status,
     plan: plan,
     billingCycle: new BillingCycle({
-      start: new Date(data.billingCycleStart),
-      end: new Date(data.billingCycleEnd),
+      start: billingCycleStart,
+      end: billingCycleEnd,
     }),
-    createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
-    updatedAt: data.updatedAt ? new Date(data.updatedAt) : new Date(),
+    createdAt,
+    updatedAt,
     ...(data.notes !== undefined && { notes: data.notes }),
   });
 }

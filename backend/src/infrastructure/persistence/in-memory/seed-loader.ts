@@ -6,6 +6,36 @@ import { ShopStatus } from '../../../domain/shop/model/shop';
 import { Plan, PlanId } from '../../../domain/shop/model/plan';
 
 /**
+ * Valid shop statuses
+ */
+const VALID_STATUSES: readonly string[] = ['active', 'past_due', 'cancelled'];
+
+/**
+ * Valid plan IDs
+ */
+const VALID_PLAN_IDS: readonly string[] = ['starter', 'grow', 'scale'];
+
+/**
+ * Asserts that a value is a valid shop status
+ */
+function assertShopStatus(value: string): ShopStatus {
+  if (!VALID_STATUSES.includes(value)) {
+    throw new Error(`Invalid shop status in seed data: "${value}"`);
+  }
+  return value as ShopStatus;
+}
+
+/**
+ * Asserts that a value is a valid plan ID
+ */
+function assertPlanId(value: string): PlanId {
+  if (!VALID_PLAN_IDS.includes(value)) {
+    throw new Error(`Invalid plan ID in seed data: "${value}"`);
+  }
+  return value as PlanId;
+}
+
+/**
  * Seed data structure from JSON file
  */
 interface SeedData {
@@ -55,14 +85,15 @@ export class SeedLoader {
 
     // Load plans from seed data
     for (const planData of data.plans) {
+      const planId = assertPlanId(planData.id);
       const overagePerOrderCents = new Decimal(planData.overagePerOrderEur).times(100).toNumber();
       const plan = new Plan({
-        id: planData.id as PlanId,
+        id: planId,
         name: planData.name,
         includedOrders: planData.includedOrders,
         overagePerOrderCents,
       });
-      this.plans.set(planData.id as PlanId, plan);
+      this.plans.set(planId, plan);
     }
 
     // Load shops
@@ -71,8 +102,8 @@ export class SeedLoader {
         id: s.id,
         tenantId: s.tenantId,
         name: s.name,
-        status: s.status as ShopStatus,
-        planId: s.planId as PlanId,
+        status: assertShopStatus(s.status),
+        planId: assertPlanId(s.planId),
         billingCycleStart: s.billingCycleStart,
         billingCycleEnd: s.billingCycleEnd,
         createdAt: '2026-03-01T00:00:00Z',

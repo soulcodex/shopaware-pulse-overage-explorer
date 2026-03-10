@@ -22,8 +22,13 @@ export class GetShopDetailHandler {
       throw new ShopNotFoundException(query.shopId);
     }
 
-    // Get usage events for this shop
-    const usageEvents = await this.usageEventRepository.findByShopId(query.tenantId, query.shopId);
+    // Get usage events for this shop within the billing cycle
+    const usageEvents = await this.usageEventRepository.findByShopIdWithinBillingCycle(
+      query.tenantId,
+      query.shopId,
+      shop.billingCycle.start,
+      shop.billingCycle.end
+    );
 
     // Calculate total orders
     const totalOrders = usageEvents.reduce((sum, event) => sum + event.orders, 0);

@@ -11,6 +11,11 @@ export class OverageSummary {
   readonly overageCharges: number;
 
   constructor(data: { totalOrders: number; plan: Plan }) {
+    // Validate totalOrders is a non-negative integer
+    if (!Number.isInteger(data.totalOrders) || data.totalOrders < 0) {
+      throw new Error('totalOrders must be a non-negative integer');
+    }
+
     this.totalOrders = data.totalOrders;
     this.includedOrders = data.plan.includedOrders;
     this.overageOrders = Math.max(0, this.totalOrders - this.includedOrders);

@@ -39,4 +39,32 @@ export class InMemoryUsageEventRepository implements UsageEventRepository {
   async findAllByTenantId(tenantId: TenantId): Promise<UsageEvent[]> {
     return this.events.filter((event) => event.tenantId.value === tenantId.value);
   }
+
+  async findByShopIdWithinBillingCycle(
+    tenantId: TenantId,
+    shopId: ShopId,
+    start: Date,
+    end: Date
+  ): Promise<UsageEvent[]> {
+    return this.events.filter(
+      (event) =>
+        event.tenantId.value === tenantId.value &&
+        event.shopId.value === shopId.value &&
+        event.timestamp.getTime() >= start.getTime() &&
+        event.timestamp.getTime() <= end.getTime()
+    );
+  }
+
+  async findAllByTenantIdWithinBillingCycle(
+    tenantId: TenantId,
+    start: Date,
+    end: Date
+  ): Promise<UsageEvent[]> {
+    return this.events.filter(
+      (event) =>
+        event.tenantId.value === tenantId.value &&
+        event.timestamp.getTime() >= start.getTime() &&
+        event.timestamp.getTime() <= end.getTime()
+    );
+  }
 }

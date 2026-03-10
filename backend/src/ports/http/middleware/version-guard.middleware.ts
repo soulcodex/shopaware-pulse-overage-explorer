@@ -24,6 +24,25 @@ export async function versionGuard(c: Context, next: Next): Promise<Response | v
     return;
   }
 
+  // Validate version header format - must be strictly numeric
+  if (!/^\d+$/.test(versionHeader)) {
+    return c.json(
+      {
+        errors: [
+          {
+            status: '400',
+            code: 'UNSUPPORTED_API_VERSION',
+            title: 'Unsupported API version',
+            detail: `X-API-Version '${versionHeader}' is not supported. Supported versions: ${SUPPORTED_VERSIONS.join(', ')}`,
+          },
+        ],
+        meta: { request_id: c.get(REQUEST_ID_CONTEXT_KEY) },
+      },
+      400,
+      { 'Content-Type': 'application/json', 'Vary': 'X-API-Version' }
+    );
+  }
+
   // Parse version
   const version = parseInt(versionHeader, 10);
 

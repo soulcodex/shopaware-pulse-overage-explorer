@@ -1,4 +1,13 @@
 /**
+ * Validates that a date is valid
+ */
+function assertValidDate(date: Date, label: string): void {
+  if (isNaN(date.getTime())) {
+    throw new Error(`Invalid date for ${label}`);
+  }
+}
+
+/**
  * BillingCycle value object - represents a billing period
  */
 export class BillingCycle {
@@ -6,6 +15,9 @@ export class BillingCycle {
   readonly end: Date;
 
   constructor(data: { start: Date; end: Date }) {
+    assertValidDate(data.start, 'billing cycle start');
+    assertValidDate(data.end, 'billing cycle end');
+
     if (data.end < data.start) {
       throw new Error('Billing cycle end must be after start');
     }

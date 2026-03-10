@@ -20,11 +20,17 @@ export class ListShopsHandler {
     // Get all usage events for the tenant
     const allEvents = await this.usageEventRepository.findAllByTenantId(query.tenantId);
 
-    // Create a map of shopId -> total orders
+    // Create a map of shopId -> total orders, filtered by each shop's billing cycle
     const ordersByShop = new Map<string, number>();
-    for (const event of allEvents) {
-      const current = ordersByShop.get(event.shopId.value) ?? 0;
-      ordersByShop.set(event.shopId.value, current + event.orders);
+    for (const shop of shops) {
+      const shopEvents = allEvents.filter(
+        (event) =>
+          event.shopId.value === shop.id.value &&
+          event.timestamp.getTime() >= shop.billingCycle.start.getTime() &&
+          event.timestamp.getTime() <= shop.billingCycle.end.getTime()
+      );
+      const totalOrders = shopEvents.reduce((sum, event) => sum + event.orders, 0);
+      ordersByShop.set(shop.id.value, totalOrders);
     }
 
     // Compute overage summary for each shop and map to DTO
