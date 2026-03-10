@@ -1,0 +1,17 @@
+# Agentic library — vendor symlinks (recreated by agentic switch)
+CLAUDE.md
+opencode.json
+.github/copilot-instructions.md
+.github/instructions/
+.gemini/
+.claude/skills
+.opencode/skills
+.agents/skills
+node_modules/
+dist/
+
+# TypeScript compiled output (tests are run from .ts sources via Vitest)
+tests/**/*.js
+tests/**/*.js.map
+tests/**/*.d.ts
+tests/**/*.d.ts.map
