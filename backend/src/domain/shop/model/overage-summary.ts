@@ -14,8 +14,7 @@ export class OverageSummary {
     this.totalOrders = data.totalOrders;
     this.includedOrders = data.plan.includedOrders;
     this.overageOrders = Math.max(0, this.totalOrders - this.includedOrders);
-    // Round to 2 decimal places
-    this.overageCharges = Math.round(this.overageOrders * data.plan.overagePerOrderEur * 100) / 100;
+    this.overageCharges = (this.overageOrders * data.plan.overagePerOrderCents) / 100;
   }
 
   equals(other: OverageSummary): boolean {

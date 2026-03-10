@@ -2,7 +2,7 @@ import { Shop, createShop, ShopStatus } from '../../../domain/shop/model/shop';
 import { ShopId } from '../../../domain/shop/model/shop-id';
 import { TenantId } from '../../../domain/shop/model/tenant-id';
 import { ShopRepository, ShopFilters } from '../../../domain/shop/repository/shop.repository';
-import type { PlanId } from '../../../domain/shop/model/plan';
+import type { Plan, PlanId } from '../../../domain/shop/model/plan';
 
 /**
  * In-memory implementation of ShopRepository
@@ -20,19 +20,22 @@ export class InMemoryShopRepository implements ShopRepository {
   /**
    * Load shops from seed data
    */
-  loadFromSeed(shopsData: Array<{
-    id: string;
-    tenantId: string;
-    name: string;
-    status: ShopStatus;
-    planId: PlanId;
-    billingCycleStart: string;
-    billingCycleEnd: string;
-    createdAt?: string;
-    updatedAt?: string;
-  }>): void {
+  loadFromSeed(
+    shopsData: Array<{
+      id: string;
+      tenantId: string;
+      name: string;
+      status: ShopStatus;
+      planId: PlanId;
+      billingCycleStart: string;
+      billingCycleEnd: string;
+      createdAt?: string;
+      updatedAt?: string;
+    }>,
+    plans: Map<PlanId, Plan>
+  ): void {
     for (const shopData of shopsData) {
-      const shop = createShop(shopData);
+      const shop = createShop(shopData, plans);
       this.shops.set(shop.id.value, shop);
     }
   }

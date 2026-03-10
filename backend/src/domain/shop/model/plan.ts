@@ -10,18 +10,18 @@ export class Plan {
   readonly id: PlanId;
   readonly name: string;
   readonly includedOrders: number;
-  readonly overagePerOrderEur: number;
+  readonly overagePerOrderCents: number;
 
   constructor(data: {
     id: PlanId;
     name: string;
     includedOrders: number;
-    overagePerOrderEur: number;
+    overagePerOrderCents: number;
   }) {
     this.id = data.id;
     this.name = data.name;
     this.includedOrders = data.includedOrders;
-    this.overagePerOrderEur = data.overagePerOrderEur;
+    this.overagePerOrderCents = data.overagePerOrderCents;
   }
 
   equals(other: Plan): boolean {
@@ -29,7 +29,7 @@ export class Plan {
       this.id === other.id &&
       this.name === other.name &&
       this.includedOrders === other.includedOrders &&
-      this.overagePerOrderEur === other.overagePerOrderEur
+      this.overagePerOrderCents === other.overagePerOrderCents
     );
   }
 }
@@ -38,9 +38,9 @@ export class Plan {
  * Predefined plans
  */
 export const PLANS: Record<PlanId, Plan> = {
-  starter: new Plan({ id: 'starter', name: 'Starter', includedOrders: 200, overagePerOrderEur: 0.05 }),
-  grow: new Plan({ id: 'grow', name: 'Grow', includedOrders: 1000, overagePerOrderEur: 0.03 }),
-  scale: new Plan({ id: 'scale', name: 'Scale', includedOrders: 5000, overagePerOrderEur: 0.01 }),
+  starter: new Plan({ id: 'starter', name: 'Starter', includedOrders: 200, overagePerOrderCents: 5 }),
+  grow: new Plan({ id: 'grow', name: 'Grow', includedOrders: 1000, overagePerOrderCents: 3 }),
+  scale: new Plan({ id: 'scale', name: 'Scale', includedOrders: 5000, overagePerOrderCents: 1 }),
 };
 
 export function getPlan(planId: PlanId): Plan {

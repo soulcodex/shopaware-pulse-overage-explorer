@@ -66,24 +66,30 @@ export class Shop {
 /**
  * Shop factory - creates a Shop from raw seed data
  */
-export function createShop(data: {
-  id: string;
-  tenantId: string;
-  name: string;
-  status: ShopStatus;
-  planId: PlanId;
-  billingCycleStart: string;
-  billingCycleEnd: string;
-  createdAt?: string;
-  updatedAt?: string;
-  notes?: SupportNote[];
-}): Shop {
+export function createShop(
+  data: {
+    id: string;
+    tenantId: string;
+    name: string;
+    status: ShopStatus;
+    planId: PlanId;
+    billingCycleStart: string;
+    billingCycleEnd: string;
+    createdAt?: string;
+    updatedAt?: string;
+    notes?: SupportNote[];
+  },
+  plans?: Map<PlanId, Plan>
+): Shop {
+  // Use provided plans from seed, or fall back to static PLANS registry
+  const plan = plans?.get(data.planId) ?? getPlan(data.planId);
+
   return new Shop({
     id: new ShopId(data.id),
     tenantId: new TenantId(data.tenantId),
     name: data.name,
     status: data.status,
-    plan: getPlan(data.planId),
+    plan: plan,
     billingCycle: new BillingCycle({
       start: new Date(data.billingCycleStart),
       end: new Date(data.billingCycleEnd),
